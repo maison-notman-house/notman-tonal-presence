@@ -47,6 +47,10 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
   $scope.devices = beaver.getDevices();
   $scope.directories = beaver.getDirectories();
   $scope.stats = beaver.getStats();
+  $scope.thirdFloorCounts = [ 0, 0, 0 ];
+  $scope.secondFloorCounts = [ 0, 0, 0 ];
+  $scope.firstFloorCounts = [ 0, 0, 0 ];
+  $scope.cafeCount = 0;
 
   // beaver.js listens on the websocket for events
   beaver.listen(Socket);
@@ -119,18 +123,34 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
 
   // Update the number of devices detected in total, by floor and zone
   function updateCounts() {
-    var third = getNumberOfDirectoryDevices('notman:third:west') +
-                getNumberOfDirectoryDevices('notman:third:centre') +
-                getNumberOfDirectoryDevices('notman:third:east');
-    var second = getNumberOfDirectoryDevices('notman:second:west') +
-                 getNumberOfDirectoryDevices('notman:second:centre') +
-                 getNumberOfDirectoryDevices('notman:second:east');
-    var first = getNumberOfDirectoryDevices('notman:first:west') +
-                getNumberOfDirectoryDevices('notman:first:centre') +
-                getNumberOfDirectoryDevices('notman:first:east');
-    var cafe = getNumberOfDirectoryDevices('notman:cafe');
-    totalCount = third + second + first + cafe;
-    floorCounts = [ cafe, first, second, third ];
+    $scope.thirdFloorCounts[0] =
+        getNumberOfDirectoryDevices('notman:third:west');
+    $scope.thirdFloorCounts[1] =
+        getNumberOfDirectoryDevices('notman:third:centre');
+    $scope.thirdFloorCounts[2] =
+        getNumberOfDirectoryDevices('notman:third:east');
+    $scope.secondFloorCounts[0] =
+        getNumberOfDirectoryDevices('notman:second:west');
+    $scope.secondFloorCounts[1] =
+        getNumberOfDirectoryDevices('notman:second:centre');
+    $scope.secondFloorCounts[2] =
+        getNumberOfDirectoryDevices('notman:second:east');
+    $scope.firstFloorCounts[0] =
+        getNumberOfDirectoryDevices('notman:first:west');
+    $scope.firstFloorCounts[1] =
+        getNumberOfDirectoryDevices('notman:first:centre');
+    $scope.firstFloorCounts[2] =
+        getNumberOfDirectoryDevices('notman:first:east');
+    $scope.cafeCount = getNumberOfDirectoryDevices('notman:cafe');
+    floorCounts[3] = $scope.thirdFloorCounts[0] + $scope.thirdFloorCounts[1] +
+                     $scope.thirdFloorCounts[2];
+    floorCounts[2] = $scope.secondFloorCounts[0] + $scope.secondFloorCounts[1]
+                     + $scope.secondFloorCounts[2];
+    floorCounts[1] = $scope.firstFloorCounts[0] + $scope.firstFloorCounts[1] +
+                     $scope.firstFloorCounts[2];
+    floorCounts[0] = $scope.cafeCount;
+    totalCount = floorCounts[3] + floorCounts[2] + floorCounts[1] +
+                 floorCounts[0];
   }
 
   // Update the relative volumes for the oscillators of each floor
