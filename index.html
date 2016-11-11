@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Notman Tonal Presence </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.0.2/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.min.js"></script>
+    <script type="text/javascript" src="js/socket.min.js"></script>
+    <script type="text/javascript" src="js/Tone.min.js"></script>
+    <script type="text/javascript" src="js/beaver.js"></script>
+    <script type="text/javascript" src="js/dashboard.js"></script>
+  </head>
+  <body ng-app="dashboard">
+    <!----- BEGIN CONTENT SECTION ----------------------------------------->
+	  <div ng-controller="DashCtrl" class="container-fluid">
+      <div class="row floor">
+        <div class="col-xs-4 text-center" id="w3">
+          3W
+        </div>
+        <div class="col-xs-4 text-center" id="c3">
+          3C
+        </div>
+        <div class="col-xs-4 text-center" id="e3">
+          3E
+        </div>
+      </div>
+      <div class="row floor">
+        <div class="col-xs-4 text-center" id="w2">
+          2W
+        </div>
+        <div class="col-xs-4 text-center" id="c2">
+          2C
+        </div>
+        <div class="col-xs-4 text-center" id="e2">
+          2E
+        </div>
+      </div>
+      <div class="row floor">
+        <div class="col-xs-4 text-center" id="w1">
+          1W
+        </div>
+        <div class="col-xs-4 text-center" id="c1">
+          1C
+        </div>
+        <div class="col-xs-4 text-center" id="e1">
+          1E
+        </div>
+      </div>
+      <div class="row floor">
+        <div class="col-xs-12 text-center" id="cafe">
+          OSMO Caf&eacute;
+        </div>
+      </div>
+    </div>
+    <!----- END CONTENT SECTION ----------------------------------------->
+  </body>
+</html>

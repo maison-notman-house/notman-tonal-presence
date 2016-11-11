@@ -1,0 +1,64 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  background: #fff;
+  font-family: 'Source Sans Pro', sans-serif;
+  margin-bottom: 60px;
+}
+
+.floor {
+  height: 25vh;
+}
+
+#w3 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/3w.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#c3 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/3c.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#e3 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/3e.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#w2 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/2w.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#c2 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/2c.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#e2 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/2e.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#w1 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/1w.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#c1 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/1c.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#e1 {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/1e.jpg) no-repeat center;
+  height: 25vh;
+}
+
+#cafe {
+  background: #000 url(https://maison-notman-house.github.io/notman-reelyactive-dashboard/places/cafe.jpg) no-repeat center;
+  height: 25vh;
+}
