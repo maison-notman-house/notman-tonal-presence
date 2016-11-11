@@ -12,6 +12,8 @@ DISPLACEMENT_FLOOR_NOTES = [ 'C2', 'E2', 'G2', 'C3' ];
 DISPLACEMENT_NOTE_DURATION = '16n';
 DISAPPEARANCE_FLOOR_NOTES = [ 'C2', 'E2', 'G2', 'C3' ];
 DISAPPEARANCE_NOTE_DURATION = '16n';
+FLOOR_VOLUME_MULTIPLIER = 8;
+FLOOR_VOLUME_BASE = -20;
 
 
 /**
@@ -49,11 +51,13 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
   // beaver.js listens on the websocket for events
   beaver.listen(Socket);
 
-  // Set up synths
+  // Set up synths and counts
   var appearanceSynth = initialiseAppearanceSynths();
   var displacementSynth = initialiseDisplacementSynth();
   var floorOsc = initialiseFloorOscillators();
   var disappearanceSynth = initialiseDisappearanceSynths();
+  var totalCount = 0;
+  var floorCounts = [ 0, 0, 0, 0 ];
 
   // Handle events pre-processed by beaver.js
   beaver.on('appearance', function(event) {
@@ -61,21 +65,26 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
       APPEARANCE_FLOOR_NOTES[getFloor(event)],
       APPEARANCE_NOTE_DURATION
     );
+    updateCounts();
+    updateFloorVolumes();
   });
   beaver.on('displacement', function(event) {
     displacementSynth.triggerAttackRelease(
       DISPLACEMENT_FLOOR_NOTES[getFloor(event)],
       DISPLACEMENT_NOTE_DURATION
     );
+    updateCounts();
+    updateFloorVolumes();
   });
   beaver.on('keep-alive', function(event) {
-    // TODO: something with floor oscillators
   });
   beaver.on('disappearance', function(event) {
     disappearanceSynth[getWing(event)].triggerAttackRelease(
       DISAPPEARANCE_FLOOR_NOTES[getFloor(event)],
       DISAPPEARANCE_NOTE_DURATION
     );
+    updateCounts();
+    updateFloorVolumes();
   });
 
   // Get the floor on which the event occurred
@@ -106,6 +115,42 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
       default:
         return 1;
     }
+  }
+
+  // Update the number of devices detected in total, by floor and zone
+  function updateCounts() {
+    var third = getNumberOfDirectoryDevices('notman:third:west') +
+                getNumberOfDirectoryDevices('notman:third:centre') +
+                getNumberOfDirectoryDevices('notman:third:east');
+    var second = getNumberOfDirectoryDevices('notman:second:west') +
+                 getNumberOfDirectoryDevices('notman:second:centre') +
+                 getNumberOfDirectoryDevices('notman:second:east');
+    var first = getNumberOfDirectoryDevices('notman:first:west') +
+                getNumberOfDirectoryDevices('notman:first:centre') +
+                getNumberOfDirectoryDevices('notman:first:east');
+    var cafe = getNumberOfDirectoryDevices('notman:cafe');
+    totalCount = third + second + first + cafe;
+    floorCounts = [ cafe, first, second, third ];
+  }
+
+  // Update the relative volumes for the oscillators of each floor
+  function updateFloorVolumes() {
+    floorOsc[0].volume.value = ((floorCounts[0] * FLOOR_VOLUME_MULTIPLIER) /
+                                (totalCount + 1)) + FLOOR_VOLUME_BASE;
+    floorOsc[1].volume.value = ((floorCounts[1] * FLOOR_VOLUME_MULTIPLIER) /
+                                (totalCount + 1)) + FLOOR_VOLUME_BASE;
+    floorOsc[2].volume.value = ((floorCounts[2] * FLOOR_VOLUME_MULTIPLIER) /
+                                (totalCount + 1)) + FLOOR_VOLUME_BASE;
+    floorOsc[3].volume.value = ((floorCounts[3] * FLOOR_VOLUME_MULTIPLIER) /
+                                (totalCount + 1)) + FLOOR_VOLUME_BASE;
+  }
+
+  // Get the number of devices in the given directory
+  function getNumberOfDirectoryDevices(directory) {
+    if(!$scope.directories.hasOwnProperty(directory)) {
+      return 0;
+    }
+    return Object.keys($scope.directories[directory].devices).length;
   }
 
   // Initialise appearance synths
@@ -163,10 +208,10 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
                      .connect(pan[2]).start());
     osc.push(new Tone.AMOscillator("C3", "sine", "sine")
                      .connect(pan[3]).start());
-    osc[0].volume.value = -18;
-    osc[1].volume.value = -18;
-    osc[2].volume.value = -18;
-    osc[3].volume.value = -18;
+    osc[0].volume.value = FLOOR_VOLUME_BASE;
+    osc[1].volume.value = FLOOR_VOLUME_BASE;
+    osc[2].volume.value = FLOOR_VOLUME_BASE;
+    osc[3].volume.value = FLOOR_VOLUME_BASE;
     return osc;
   }
 
