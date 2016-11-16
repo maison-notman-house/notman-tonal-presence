@@ -14,6 +14,7 @@ DISAPPEARANCE_FLOOR_NOTES = [ 'C2', 'E2', 'G2', 'C3' ];
 DISAPPEARANCE_NOTE_DURATION = '16n';
 FLOOR_VOLUME_MULTIPLIER = 8;
 FLOOR_VOLUME_BASE = -20;
+HARD_PAN_RATIO = 0.8;
 
 
 /**
@@ -176,18 +177,30 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
   // Initialise appearance synths
   function initialiseAppearanceSynths() {
     var synthOptions = {
-      envelope: { attack: 0.1, decay: 0.1 },
+      envelope: { attack: 0.1, decay: 0.1, sustain: 0.1, release: 0.1 },
       oscillator: { type: "sine" },
       modulation: { type: "sine" }
     };
+    var effectOptions = {
+      frequency: 0.25,
+      delayTime: 2.5,
+      depth: 0.7,
+      feedback: 0.4,
+      type: "sine",
+      spread: 180 
+    };
     var pan = [];
+    var effect = [];
     var synth = [];
-    pan.push(new Tone.Panner(-1).toMaster());
+    pan.push(new Tone.Panner(-HARD_PAN_RATIO).toMaster());
     pan.push(new Tone.Panner(0).toMaster());
-    pan.push(new Tone.Panner(1).toMaster());
-    synth.push(new Tone.AMSynth(synthOptions).connect(pan[0]));
-    synth.push(new Tone.AMSynth(synthOptions).connect(pan[1]));
-    synth.push(new Tone.AMSynth(synthOptions).connect(pan[2]));
+    pan.push(new Tone.Panner(HARD_PAN_RATIO).toMaster());
+    effect.push(new Tone.Chorus(effectOptions).connect(pan[0]));
+    effect.push(new Tone.Chorus(effectOptions).connect(pan[1]));
+    effect.push(new Tone.Chorus(effectOptions).connect(pan[2]));
+    synth.push(new Tone.AMSynth(synthOptions).connect(effect[0]));
+    synth.push(new Tone.AMSynth(synthOptions).connect(effect[1]));
+    synth.push(new Tone.AMSynth(synthOptions).connect(effect[2]));
     return synth;
   }
 
@@ -238,18 +251,30 @@ angular.module('dashboard', ['btford.socket-io', 'reelyactive.beaver'])
   // Initialise disappearance synths
   function initialiseDisappearanceSynths() {
     var synthOptions = {
-      envelope: { attack: 0.1, decay: 0.1 },
+      envelope: { attack: 0.1, decay: 0.1, sustain: 0.1, release: 0.1 },
       oscillator: { type: "square" },
       modulation: { type: "square" }
     };
+    var effectOptions = {
+      frequency: 0.5,
+      delayTime: 2.5,
+      depth: 0.7,
+      feedback: 0.4,
+      type: "square",
+      spread: 180 
+    };
     var pan = [];
+    var effect = [];
     var synth = [];
-    pan.push(new Tone.Panner(-1).toMaster());
+    pan.push(new Tone.Panner(-HARD_PAN_RATIO).toMaster());
     pan.push(new Tone.Panner(0).toMaster());
-    pan.push(new Tone.Panner(1).toMaster());
-    synth.push(new Tone.AMSynth(synthOptions).connect(pan[0]));
-    synth.push(new Tone.AMSynth(synthOptions).connect(pan[1]));
-    synth.push(new Tone.AMSynth(synthOptions).connect(pan[2]));
+    pan.push(new Tone.Panner(HARD_PAN_RATIO).toMaster());
+    effect.push(new Tone.Chorus(effectOptions).connect(pan[0]));
+    effect.push(new Tone.Chorus(effectOptions).connect(pan[1]));
+    effect.push(new Tone.Chorus(effectOptions).connect(pan[2]));
+    synth.push(new Tone.AMSynth(synthOptions).connect(effect[0]));
+    synth.push(new Tone.AMSynth(synthOptions).connect(effect[1]));
+    synth.push(new Tone.AMSynth(synthOptions).connect(effect[2]));
     return synth;
   }
 });
