@@ -184,28 +184,58 @@ angular.module('reelyactive.beaver', [])
       }
     }
 
+    function isAccepted(event) {
+      if(event.hasOwnProperty('tiraid') &&
+         event.tiraid.hasOwnProperty('identifier') &&
+         event.tiraid.identifier.hasOwnProperty('advData')) {
+        var advData = event.tiraid.identifier.advData;
+        if(advData.hasOwnProperty('manufacturerSpecificData') &&
+           advData.manufacturerSpecificData.hasOwnProperty('nearable')) {
+          return false; // Nearable
+        }
+        if(advData.hasOwnProperty('manufacturerSpecificData') &&
+           advData.manufacturerSpecificData.hasOwnProperty('iBeacon')) {
+          return false; // iBeacon
+        }
+        if(advData.hasOwnProperty('complete128BitUUIDs') &&
+           (advData.complete128BitUUIDs ===
+            '7265656c794163746976652055554944')) {
+          return false; // Reelceiver
+        }
+      }
+      return true;
+    }
+
 
     // Handle incoming socket events by type
     var handleSocketEvents = function(Socket) {
 
       Socket.on('appearance', function(event) {
-        updateDevice('appearance', event);
-        updateDirectories(event);
+        if(isAccepted(event)) {
+          updateDevice('appearance', event);
+          updateDirectories(event);
+        }
       });
 
       Socket.on('displacement', function(event) {
-        updateDevice('displacement', event);
-        updateDirectories(event);
+        if(isAccepted(event)) {
+          updateDevice('displacement', event);
+          updateDirectories(event);
+        }
       });
 
       Socket.on('keep-alive', function(event) {
-        updateDevice('keep-alive', event);
-        updateDirectories(event);
+        if(isAccepted(event)) {
+          updateDevice('keep-alive', event);
+          updateDirectories(event);
+        }
       });
 
       Socket.on('disappearance', function(event) {
-        updateDevice('disappearance', event);
-        updateDirectories(event);
+        if(isAccepted(event)) {
+          updateDevice('disappearance', event);
+          updateDirectories(event);
+        }
       });
 
       Socket.on('error', function(err, data) {
