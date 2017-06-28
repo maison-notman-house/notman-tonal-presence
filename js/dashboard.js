@@ -5,7 +5,7 @@
 
 
 // Constant definitions
-DEFAULT_SOCKET_URL = 'https://www.hyperlocalcontext.com/notman';
+DEFAULT_SOCKET_URL = 'https://www.hyperlocalcontext.com/';
 APPEARANCE_FLOOR_NOTES = [ 'C3', 'E3', 'G3', 'C4' ];
 APPEARANCE_NOTE_DURATION = '16n';
 DISPLACEMENT_FLOOR_NOTES = [ 'C2', 'E2', 'G2', 'C3' ];
